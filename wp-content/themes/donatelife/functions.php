@@ -2522,26 +2522,35 @@ function generate_pdf_and_attach_to_email($mail_object, $custom_form, $data, $en
 		);
 		
 		if($insert_volunteer) {
-
+			
 			$lastid = $wpdb->insert_id;
 			$tmp_name = $_FILES['upload-1']['tmp_name'];
-			$photo = $lastid.'-'.$_FILES['upload-1']['name'];
+			$photoname = basename($_FILES['upload-1']['name']);
+
+			$photo = $lastid.'-'.$photoname;
+
 			$upload_dir = wp_upload_dir();
 			$custom_dir = $upload_dir['basedir'] . '/volunteer';
 			$custom_url = $upload_dir['baseurl'] . '/volunteer';
-
-			if ( ! file_exists( $custom_dir ) ) {
-				wp_mkdir_p( $custom_dir ); // Create the directory with the correct permissions
-				chmod($custom_dir, 0755);
-			}
+			
+			$data['upload-1']['file']['file_name'] = $photo;
+			$data['upload-1']['file']['file_url'] = $custom_url.'/'.$photo;
+			$data['upload-1']['file']['file_path'] = $custom_dir.'/'.$photo;
+			// if ( ! file_exists( $custom_dir ) ) {
+			// 	wp_mkdir_p( $custom_dir ); // Create the directory with the correct permissions
+			// 	chmod($custom_dir, 0755);
+			// }
 			$wpdb->update($volunteer_table,array('photo' => $photo), array('id' => $lastid));
 
-			// $move_path =  $custom_dir.'/'.$photo;
-			// // Check if the custom folder exists, if not create it
-			// if(move_uploaded_file($tmp_name,$move_path)) {
-				
-			// }else{
-			// 	echo $tmp_name;
+			chmod($custom_dir, 0755);
+			$move_path =  $custom_dir.'/'.$photo;
+			// Check if the custom folder exists, if not create it
+			
+			if(move_uploaded_file($tmp_name,$move_path)) {
+				// echo 'successfully uplaoded';
+			}
+			// else{
+			// 	echo $_FILES['upload-1']['error'];
 			// }
 			
 		}
@@ -2567,6 +2576,13 @@ function generate_pdf_and_attach_to_email($mail_object, $custom_form, $data, $en
 		);
 	}
 }
+
+add_filter('forminator_custom_upload_subfolder',function($subfolder, $form_id, $dir) {
+	if($form_id == '2257') { //volunteer form id
+		$subfolder = 'volunteer';
+	} 
+	return $subfolder;
+},20,3);
 
 /**Send SMS after user submits the form - right now API is not working. */
 //add_action('forminator_custom_form_mail_before_send_mail', 'send_sms_after_form_submission', 30,4);
@@ -2769,6 +2785,26 @@ function custom_table_menu() {
         'dashicons-list-view', // Icon
         8                    // Position
     );
+	
+	add_menu_page(
+        'Contact Data',      // Page title
+        'Contact Data',      // Menu title
+        'manage_options',    // Capability
+        'contact-form-data',      // Menu slug
+        'get_wp_contact_form_data', // Callback function
+        'dashicons-list-view', // Icon
+        9                    // Position
+    );
+	
+	add_menu_page(
+        'Subscription Data',      // Page title
+        'Subscription Data',      // Menu title
+        'manage_options',    // Capability
+        'subscription-form-data',      // Menu slug
+        'get_wp_subscription_form_data', // Callback function
+        'dashicons-list-view', // Icon
+        10                   // Position
+    );
 }
 add_action('admin_menu', 'custom_table_menu');
 
@@ -2823,6 +2859,46 @@ function get_wp_online_donation_data(){
     ?>
     <div class="wrap">
         <h1 class="wp-heading-inline"><?php _e('Online Donation Data', 'sp'); ?></h1>
+        <form method="post">
+            <?php
+            $table->display();
+            ?>
+        </form>
+    </div>
+    <?php
+}
+
+function get_wp_contact_form_data(){
+	if (!class_exists('WP_List_Table')) {
+		require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
+	}
+	require_once 'class/wp_list_contact_form_data.php'; 
+
+	$table = new Contact_Form_List();
+    $table->prepare_items();
+    ?>
+    <div class="wrap">
+        <h1 class="wp-heading-inline"><?php _e('Contact form Data', 'sp'); ?></h1>
+        <form method="post">
+            <?php
+            $table->display();
+            ?>
+        </form>
+    </div>
+    <?php
+}
+
+function get_wp_subscription_form_data(){
+	if (!class_exists('WP_List_Table')) {
+		require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
+	}
+	require_once 'class/wp_list_subscription_form_data.php'; 
+
+	$table = new Subscription_Form_List();
+    $table->prepare_items();
+    ?>
+    <div class="wrap">
+        <h1 class="wp-heading-inline"><?php _e('Subscription Data', 'sp'); ?></h1>
         <form method="post">
             <?php
             $table->display();
@@ -3242,4 +3318,54 @@ function load_online_donation_content_callback() {
 	$html = ob_get_clean();
 	echo $html;
 	wp_die();
+}
+
+//contact form submission store to db
+add_action('wpcf7_before_send_mail', 'save_contact_form_data_to_custom_table');
+
+function save_contact_form_data_to_custom_table($contact_form) {
+    
+    if ($contact_form->id() == '2049') { //contact form
+        
+        $submission = WPCF7_Submission::get_instance();
+        
+        if ($submission) {
+            $data = $submission->get_posted_data();
+
+            // Prepare the data to insert into your custom table
+            global $wpdb;
+
+            $table_name = $wpdb->prefix . 'contact_master'; // Use your actual custom table name
+
+            $wpdb->insert($table_name, array(
+                'cname' => sanitize_text_field($data['username']), // Change 'your-name' to your field name
+                'cemail' => sanitize_email($data['email']), // Change 'your-email' to your field name
+                'ccontact' => sanitize_text_field($data['contact']), // Change 'your-phone' to your field name
+                'csubject' => sanitize_text_field($data['subject']), // Change 'your-message' to your field name
+                'cmessage' => sanitize_textarea_field($data['message']), // Change 'your-message' to your field name
+                'is_trash' => 0,
+            ));
+        }
+    }
+    
+	if ($contact_form->id() == '98') { //subscription form
+        
+        $submission = WPCF7_Submission::get_instance();
+        
+        if ($submission) {
+            $data = $submission->get_posted_data();
+
+            // Prepare the data to insert into your custom table
+            global $wpdb;
+
+            $table_name = $wpdb->prefix . 'subscription_master'; // Use your actual custom table name
+
+            $wpdb->insert($table_name, array(
+                's_name' => sanitize_text_field($data['fullname']), // Change 'your-name' to your field name
+                's_email' => sanitize_email($data['useremail']), // Change 'your-email' to your field name
+                's_date' => date('Y-m-d'),
+				'new' => 1
+            ));
+        }
+    }
 }

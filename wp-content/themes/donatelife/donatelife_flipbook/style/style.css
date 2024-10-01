@@ -1589,10 +1589,10 @@ i,u{font-style:normal;text-decoration:none;}
 }
 
 .star {
-  -webkit-mask: url(http://localhost/donatelife/wp-content/themes/donatelife/donatelife_flipbook/icon/star_mask.png) no-repeat center center;
-  -ms-mask: url(http://localhost/donatelife/wp-content/themes/donatelife/donatelife_flipbook/icon/star_mask.png) no-repeat center center;
-  -o-mask: url(http://localhost/donatelife/wp-content/themes/donatelife/donatelife_flipbook/icon/star_mask.png) no-repeat center center;
-  -moz-mask: url(http://localhost/donatelife/wp-content/themes/donatelife/donatelife_flipbook/icon/star_mask.png) no-repeat center center;
+  -webkit-mask: url(https://www.donatelife.org.in/wp-content/themes/donatelife/donatelife_flipbook/icon/star_mask.png) no-repeat center center;
+  -ms-mask: url(https://www.donatelife.org.in/wp-content/themes/donatelife/donatelife_flipbook/icon/star_mask.png) no-repeat center center;
+  -o-mask: url(https://www.donatelife.org.in/wp-content/themes/donatelife/donatelife_flipbook/icon/star_mask.png) no-repeat center center;
+  -moz-mask: url(https://www.donatelife.org.in/wp-content/themes/donatelife/donatelife_flipbook/icon/star_mask.png) no-repeat center center;
 }
 
 .heart {

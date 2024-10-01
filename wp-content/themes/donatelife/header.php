@@ -22,7 +22,7 @@
 	<?php wp_head(); ?>
 	<!-- end of wordpress head -->
 
-	<?php if($_SERVER['HTTP_HOST']  == 'donatelife.org.in'){ ?>
+	<?php if($_SERVER['HTTP_HOST']  == 'donatelife.org.in' || $_SERVER['HTTP_HOST']  == 'www.donatelife.org.in'){ ?>
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-RV7DVV8PDJ"></script>
 		<script>
