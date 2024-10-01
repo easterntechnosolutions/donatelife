@@ -30,7 +30,7 @@ wp-config.php
 /wp-content/plugins/hello.php
 
 # Uploads
-/wp-content/uploads/
+wp-content/uploads/
 wp-content/blogs.dir/
 wp-content/upgrade/
 wp-content/backup-db/
@@ -57,7 +57,7 @@ wp-content/wpo-cache/*
 *.log
 
 # htaccess
-/.htaccess
+.htaccess
 
 # Extra cPanel Options
 .well-known/
