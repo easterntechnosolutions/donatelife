@@ -597,7 +597,7 @@ function display_donated_number_callback(){
 			<!-- Start single-item -->
 			<div class="welcome-item">
 				<div class="img-holder">
-					<figure><a href="#"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-1.jpg" alt="Images"></a></figure>
+					<figure><a href="#"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-1.jpg" alt="Images" loading="lazy"></a></figure>
 				</div>
 				<div class="text">
 					<div class="pro-text text-center">
@@ -614,7 +614,7 @@ function display_donated_number_callback(){
 			<!-- Start single-item -->
 			<div class="welcome-item">
 				<div class="img-holder">
-					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-2.jpg" alt="Images"></a></figure>
+					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-2.jpg" alt="Images" loading="lazy"></a></figure>
 				</div>
 				<div class="text">
 					<div class="pro-text text-center">
@@ -630,7 +630,7 @@ function display_donated_number_callback(){
 			<!-- Start single-item -->
 			<div class="welcome-item">
 				<div class="img-holder">
-					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-3.jpg" alt="Images"></a></figure>
+					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-3.jpg" alt="Images" loading="lazy"></a></figure>
 				</div>
 				<div class="text">
 					<div class="pro-text text-center">
@@ -646,7 +646,7 @@ function display_donated_number_callback(){
 			<!-- Start single-item -->
 			<div class="welcome-item">
 				<div class="img-holder">
-					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/lungs.jpg" alt="Images"></a></figure>
+					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/lungs.jpg" alt="Images" loading="lazy"></a></figure>
 				</div>
 				<div class="text">
 					<div class="pro-text text-center">
@@ -662,7 +662,7 @@ function display_donated_number_callback(){
 			<!-- Start single-item -->
 			<div class="welcome-item">
 				<div class="img-holder">
-					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-4.jpg" alt="Images"></a></figure>
+					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-4.jpg" alt="Images" loading="lazy"></a></figure>
 				</div>
 				<div class="text">
 					<div class="pro-text text-center">
@@ -677,7 +677,7 @@ function display_donated_number_callback(){
 		<div class="col-md-2 col-sm-6 col-xs-6 organ-div">
 			<div class="welcome-item">
 				<div class="img-holder">
-					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-9.jpg" alt="Images"></a></figure>
+					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-9.jpg" alt="Images" loading="lazy"></a></figure>
 				</div>
 				<div class="text">
 					<div class="pro-text text-center">
@@ -692,7 +692,7 @@ function display_donated_number_callback(){
 			<!-- Start single-item -->
 			<div class="welcome-item">
 				<div class="img-holder">
-					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h7.png" alt="Images"></a></figure>
+					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h7.png" alt="Images" loading="lazy"></a></figure>
 				</div>
 				<div class="text">
 					<div class="pro-text text-center">
@@ -708,7 +708,7 @@ function display_donated_number_callback(){
 			<!-- Start single-item -->
 			<div class="welcome-item">
 				<div class="img-holder">
-					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-5.jpg" alt="Images"></a></figure>
+					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-5.jpg" alt="Images" loading="lazy"></a></figure>
 				</div>
 				<div class="text">
 					<div class="pro-text text-center">
@@ -1810,7 +1810,7 @@ function fetch_pdf_data(){
 						<div class="text-center csr-gallery position-relative wow fadeInUp" data-wow-duration="300ms">
 							<a class="" href="<?php echo $file; ?>" target="_blank">
 								<figure>
-									<img src="<?php echo $image; ?>" alt="<?php echo $downloadTitle; ?>" class="" height="300" />
+									<img src="<?php echo $image; ?>" alt="<?php echo $downloadTitle; ?>" class="" height="300" loading="lazy"/>
 									<div class="overlay">
 										<span class="overlay-span">
 											<i class="fa fa-search" aria-hidden="true"></i>
