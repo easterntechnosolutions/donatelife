@@ -933,7 +933,7 @@ function get_wp_donor_data(){
 	if (!class_exists('WP_List_Table')) {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 	}
-	require_once 'class/wp_list_donor_data.php'; 
+	require_once get_stylesheet_directory().'/class/wp_list_donor_data.php'; 
 
 	$table = new Donor_List();
     $table->prepare_items();
@@ -953,7 +953,7 @@ function get_wp_volunteer_data(){
 	if (!class_exists('WP_List_Table')) {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 	}
-	require_once 'class/wp_list_volunteer_data.php'; 
+	require_once get_stylesheet_directory().'/class/wp_list_volunteer_data.php'; 
 
 	$table = new Volunteer_List();
     $table->prepare_items();
@@ -973,7 +973,7 @@ function get_wp_online_donation_data(){
 	if (!class_exists('WP_List_Table')) {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 	}
-	require_once 'class/wp_list_online_donation_data.php'; 
+	require_once get_stylesheet_directory().'/class/wp_list_online_donation_data.php'; 
 
 	$table = new Online_Donation_List();
     $table->prepare_items();
@@ -993,7 +993,7 @@ function get_wp_contact_form_data(){
 	if (!class_exists('WP_List_Table')) {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 	}
-	require_once 'class/wp_list_contact_form_data.php'; 
+	require_once get_stylesheet_directory().'/class/wp_list_contact_form_data.php'; 
 
 	$table = new Contact_Form_List();
     $table->prepare_items();
@@ -1013,7 +1013,7 @@ function get_wp_subscription_form_data(){
 	if (!class_exists('WP_List_Table')) {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 	}
-	require_once 'class/wp_list_subscription_form_data.php'; 
+	require_once get_stylesheet_directory().'/class/wp_list_subscription_form_data.php'; 
 
 	$table = new Subscription_Form_List();
     $table->prepare_items();
@@ -1033,7 +1033,7 @@ function get_wp_latest_figure_data(){
 	if (!class_exists('WP_List_Table')) {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 	}
-	require_once 'class/wp_list_latest_figure_data.php'; 
+	require_once get_stylesheet_directory().'/class/wp_list_latest_figure_data.php'; 
 
 	$table = new Latest_Figure_List();
     $table->prepare_items();
