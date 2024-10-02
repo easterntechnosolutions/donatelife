@@ -1053,7 +1053,7 @@ function get_wp_recepients_data(){
 	if (!class_exists('WP_List_Table')) {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 	}
-	require_once 'class/wp_list_recepients_data.php'; 
+	require_once get_stylesheet_directory().'/class/wp_list_recepients_data.php'; 
 
 	$table = new Donor_Recepients_List();
     $table->prepare_items();
