@@ -1058,7 +1058,7 @@ add_action('init', 'ccavenue_submit_handler');
 
 function ccavenue_submit_handler() {
 	// print_r($_SERVER);
-    if ($_SERVER['REQUEST_URI'] == '/donatelife/ccavenue-payment-page/') {
+    if ($_SERVER['REQUEST_URI'] == '/donatelife/ccavenue-payment-page/' || $_SERVER['REQUEST_URI'] == '/ccavenue-payment-page/') {
         $merchant_id = '187810';  // Replace with your Merchant ID
         $access_code = 'AVZP79FH90BP66PZPB';  // Replace with your Access Code
         $working_key = '9E52BA0317EB2B12ADF4FE9A504897A0';  // Replace with your Working Key
