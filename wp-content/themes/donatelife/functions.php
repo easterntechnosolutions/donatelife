@@ -997,8 +997,95 @@ function generate_pdf_and_attach_to_email($mail_object, $custom_form, $data, $en
 				'is_trash' => 0,
 			)
 		);
+		
+		
 	}
 }
+
+/*
+* @param1 : Plain String
+* @param2 : Working key provided by CCAvenue
+* @return : Decrypted String
+*/
+function encrypt($plainText,$key)
+{
+	$key = hextobin(md5($key));
+	$initVector = pack("C*", 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f);
+	$openMode = openssl_encrypt($plainText, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $initVector);
+	$encryptedText = bin2hex($openMode);
+	return $encryptedText;
+}
+
+/*
+* @param1 : Encrypted String
+* @param2 : Working key provided by CCAvenue
+* @return : Plain String
+*/
+function decrypt($encryptedText,$key)
+{
+	$key = hextobin(md5($key));
+	$initVector = pack("C*", 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f);
+	$encryptedText = hextobin($encryptedText);
+	$decryptedText = openssl_decrypt($encryptedText, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $initVector);
+	return $decryptedText;
+}
+
+function hextobin($hexString) 
+ { 
+	$length = strlen($hexString); 
+	$binString="";   
+	$count=0; 
+	while($count<$length) 
+	{       
+	    $subString =substr($hexString,$count,2);           
+	    $packedString = pack("H*",$subString); 
+	    if ($count==0)
+	    {
+			$binString=$packedString;
+	    } 
+	    
+	    else 
+	    {
+			$binString.=$packedString;
+	    } 
+	    
+	    $count+=2; 
+	} 
+        return $binString; 
+  } 
+
+add_action('init', 'ccavenue_submit_handler');
+
+function ccavenue_submit_handler() {
+	// print_r($_SERVER);
+    if ($_SERVER['REQUEST_URI'] == '/donatelife/ccavenue-payment-page/') {
+        $merchant_id = '187810';  // Replace with your Merchant ID
+        $access_code = 'AVZP79FH90BP66PZPB';  // Replace with your Access Code
+        $working_key = '9E52BA0317EB2B12ADF4FE9A504897A0';  // Replace with your Working Key
+		// print_r($_REQUEST);
+        $amount = $_REQUEST['amount'];
+        $customer_name = $_REQUEST['name'];
+        $customer_email = $_REQUEST['email'];
+        $customer_phone = $_REQUEST['phone'];
+
+        $merchant_data = "merchant_id=" . $merchant_id . "&order_id=" . uniqid() . "&amount=" . $amount . "&currency=INR";
+        $merchant_data .= "&redirect_url=" . get_site_url() . "/ccavenue-payment-response";
+        $merchant_data .= "&cancel_url=" . get_site_url() . "/ccavenue-payment-cancel";
+        $merchant_data .= "&billing_name=" . $customer_name;
+        $merchant_data .= "&billing_email=" . $customer_email;
+        $merchant_data .= "&billing_tel=" . $customer_phone;
+
+        $encrypted_data = encrypt($merchant_data, $working_key);
+
+        echo '<form id="ccavenue_form" method="post" action="https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction">';
+        echo '<input type="hidden" name="encRequest" value="' . $encrypted_data . '">';
+        echo '<input type="hidden" name="access_code" value="' . $access_code . '">';
+        echo '</form>';
+        echo '<script>document.getElementById("ccavenue_form").submit();</script>';
+        exit;
+    }
+}
+
 
 add_filter('forminator_custom_upload_subfolder',function($subfolder, $form_id, $dir) {
 	if($form_id == '2257') { //volunteer form id
@@ -1006,6 +1093,23 @@ add_filter('forminator_custom_upload_subfolder',function($subfolder, $form_id, $
 	} 
 	return $subfolder;
 },20,3);
+
+// function custom_ccavenue_rewrite_rule() {
+//     add_rewrite_rule('^ccavenue-payment-page/([^/]*)/([^/]*)/([^/]*)/([^/]*)/?$', 
+// 	'index.php?pagename=ccavenue-payment-page&name=$matches[1]&email=$matches[2]&number=$matches[3]&id=$matches[4]', 
+// 	'top');
+// }
+// add_action('init', 'custom_ccavenue_rewrite_rule');
+
+
+// function add_custom_query_vars($vars) {
+//     $vars[] = 'name';
+//     $vars[] = 'email';
+//     $vars[] = 'amount';
+//     $vars[] = 'id';
+//     return $vars;
+// }
+// add_filter('query_vars', 'add_custom_query_vars');
 
 /**Send SMS after user submits the form - right now API is not working. */
 //add_action('forminator_custom_form_mail_before_send_mail', 'send_sms_after_form_submission', 30,4);
@@ -1039,38 +1143,6 @@ function send_sms_after_form_submission($mail_object, $custom_form, $data, $entr
 		curl_close($ch1);
 	}
 
-}
-
-add_action('forminator_form_after_handle_submit', 'save_forminator_data_to_custom_table', 10, 2);
-function save_forminator_data_to_custom_table($entry, $form_id) {
-    global $wpdb;
-	echo 'entry';
-	print_r($entry); 
-	echo 'form id';
-	print_r($form_id);
-
-    // Get form data
-    $form_data = $entry->get_fields();
-
-    // Extract specific fields based on your form (replace 'name' and 'email' with your field IDs)
-    $user_name = isset($form_data['name']) ? sanitize_text_field($form_data['name']) : '';
-    $user_email = isset($form_data['email']) ? sanitize_email($form_data['email']) : '';
-    $message = isset($form_data['message']) ? sanitize_textarea_field($form_data['message']) : '';
-
-    // Insert data into custom table
-    $wpdb->insert(
-        $wpdb->prefix . 'custom_form_submissions',
-        array(
-            'form_id'         => $form_id,
-            'user_name'       => $user_name,
-            'user_email'      => $user_email,
-            'message'         => $message,
-            'submission_date' => current_time('mysql')
-        ),
-        array(
-            '%d', '%s', '%s', '%s', '%s'
-        )
-    );
 }
 
 
@@ -1136,9 +1208,9 @@ function display_text_after_donor_form() {
 }
 
 /**Online donation form - connect with ccavenue payment gateway */
-//add_action('forminator_custom_form_after_handle_submit', 'custom_forminator_ccavenue_redirect', 10, 4);
-function custom_forminator_ccavenue_redirect($entry, $form_id, $field_data_array, $form_settings) {
-	print_r($field_data_array); die();
+//add_action('forminator_form_before_handle_submit', 'custom_forminator_ccavenue_redirect', 10, 3);
+function custom_forminator_ccavenue_redirect($form_id, $field_data, $entry_id) {
+	print_r($field_data_array); 
     if ($form_id == 2270) {
         // Create the CCAvenue request
         $ccavenue_data = array(
