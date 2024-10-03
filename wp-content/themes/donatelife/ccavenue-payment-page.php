@@ -1,8 +1,9 @@
 <?php
 /* Template Name: CCAvenue Payment Page */
 get_header();
-print_r($_POST); print_r($_GET);
+print_r($_POST); print_r($_GET); 
 echo 'this page '.$_POST['hidden-4']. 'query var '.get_query_var('amount');
+die();
 if (isset($_POST['amount'])) {
     // CCAvenue Merchant Details
     $merchant_id = '187810'; // Provided by CCAvenue
