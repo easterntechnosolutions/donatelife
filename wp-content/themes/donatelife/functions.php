@@ -604,6 +604,7 @@ function send_smtp_email($phpmailer){
 	$phpmailer->FromName = 'Donate Life';
 }
 
+//Remove P tag from the ACF field - content blocks/WYSIWYG editor on frontend
 function my_acf_wysiwyg_remove_wpautop( $value, $post_id, $field ) {
     // Disable wpautop for specific ACF fields
     remove_filter('acf_the_content', 'wpautop');
@@ -998,122 +999,16 @@ function generate_pdf_and_attach_to_email($mail_object, $custom_form, $data, $en
 			)
 		);
 		
-		
 	}
 }
 
-/*
-* @param1 : Plain String
-* @param2 : Working key provided by CCAvenue
-* @return : Decrypted String
-*/
-function encrypt($plainText,$key)
-{
-	$key = hextobin(md5($key));
-	$initVector = pack("C*", 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f);
-	$openMode = openssl_encrypt($plainText, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $initVector);
-	$encryptedText = bin2hex($openMode);
-	return $encryptedText;
-}
+// add_filter('forminator_custom_upload_subfolder',function($subfolder, $form_id, $dir) {
+// 	if($form_id == '2257') { //volunteer form id
+// 		$subfolder = 'volunteer';
+// 	} 
+// 	return $subfolder;
+// },20,3);
 
-/*
-* @param1 : Encrypted String
-* @param2 : Working key provided by CCAvenue
-* @return : Plain String
-*/
-function decrypt($encryptedText,$key)
-{
-	$key = hextobin(md5($key));
-	$initVector = pack("C*", 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f);
-	$encryptedText = hextobin($encryptedText);
-	$decryptedText = openssl_decrypt($encryptedText, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $initVector);
-	return $decryptedText;
-}
-
-function hextobin($hexString) 
- { 
-	$length = strlen($hexString); 
-	$binString="";   
-	$count=0; 
-	while($count<$length) 
-	{       
-	    $subString =substr($hexString,$count,2);           
-	    $packedString = pack("H*",$subString); 
-	    if ($count==0)
-	    {
-			$binString=$packedString;
-	    } 
-	    
-	    else 
-	    {
-			$binString.=$packedString;
-	    } 
-	    
-	    $count+=2; 
-	} 
-        return $binString; 
-  } 
-
-//add_action('template_redirect', 'ccavenue_submit_handler');
-
-function ccavenue_submit_handler() {
-	// print_r($_SERVER);
-    if (is_page('ccavenue-payment-page')) {
-        $merchant_id = '187810';  // Replace with your Merchant ID
-        $access_code = 'AVZP79FH90BP66PZPB';  // Replace with your Access Code
-        $working_key = '9E52BA0317EB2B12ADF4FE9A504897A0';  // Replace with your Working Key
-		print_r($_REQUEST);
-		echo 'get';
-		print_r($_GET);
-		echo 'post';
-		print_r($_POST); die();
-        $amount = $_REQUEST['amount'];
-        $customer_name = $_REQUEST['name'];
-        $customer_email = $_REQUEST['email'];
-        $customer_phone = $_REQUEST['phone'];
-
-        $merchant_data = "merchant_id=" . $merchant_id . "&order_id=" . uniqid() . "&amount=" . $amount . "&currency=INR";
-        $merchant_data .= "&redirect_url=" . get_site_url() . "/ccavenue-payment-response";
-        $merchant_data .= "&cancel_url=" . get_site_url() . "/ccavenue-payment-cancel";
-        $merchant_data .= "&billing_name=" . $customer_name;
-        $merchant_data .= "&billing_email=" . $customer_email;
-        $merchant_data .= "&billing_tel=" . $customer_phone;
-
-        $encrypted_data = encrypt($merchant_data, $working_key);
-
-        echo '<form id="ccavenue_form" method="post" action="https://secure.ccavenue.com/transaction/transaction.do?command=initiateTransaction">';
-        echo '<input type="hidden" name="encRequest" value="' . $encrypted_data . '">';
-        echo '<input type="hidden" name="access_code" value="' . $access_code . '">';
-        echo '</form>';
-        echo '<script>document.getElementById("ccavenue_form").submit();</script>';
-        exit;
-    }
-}
-
-
-add_filter('forminator_custom_upload_subfolder',function($subfolder, $form_id, $dir) {
-	if($form_id == '2257') { //volunteer form id
-		$subfolder = 'volunteer';
-	} 
-	return $subfolder;
-},20,3);
-
-// function custom_ccavenue_rewrite_rule() {
-//     add_rewrite_rule('^ccavenue-payment-page/([^/]*)/([^/]*)/([^/]*)/([^/]*)/?$', 
-// 	'index.php?pagename=ccavenue-payment-page&name=$matches[1]&email=$matches[2]&number=$matches[3]&id=$matches[4]', 
-// 	'top');
-// }
-// add_action('init', 'custom_ccavenue_rewrite_rule');
-
-
-// function add_custom_query_vars($vars) {
-//     $vars[] = 'name';
-//     $vars[] = 'email';
-//     $vars[] = 'amount';
-//     $vars[] = 'id';
-//     return $vars;
-// }
-// add_filter('query_vars', 'add_custom_query_vars');
 
 /**Send SMS after user submits the form - right now API is not working. */
 //add_action('forminator_custom_form_mail_before_send_mail', 'send_sms_after_form_submission', 30,4);
@@ -1211,75 +1106,55 @@ function display_text_after_donor_form() {
 	return ob_get_clean();
 }
 
-/**Online donation form - connect with ccavenue payment gateway */
-//add_action('forminator_form_before_handle_submit', 'custom_forminator_ccavenue_redirect', 10, 3);
-function custom_forminator_ccavenue_redirect($form_id, $field_data, $entry_id) {
-	print_r($field_data_array); 
-    if ($form_id == 2270) {
-        // Create the CCAvenue request
-        $ccavenue_data = array(
-            'merchant_id' => '187810',
-            'amount' => $entry->amount,
-            'order_id' => $entry->entry_id,
-            'currency' => 'INR',
-            'redirect_url' => 'YOUR_REDIRECT_URL',
-            'cancel_url' => 'YOUR_CANCEL_URL',
-			'language' => 'EN',
-			'billing_name' => $odname,
-			'billing_address' => $odaddress,
-			'billing_city' => $odcity,
-			'billing_state' => $odstate,
-			'billing_zip' => $odpin,
-			'billing_country' => $odcountry,
-			'billing_tel' => $odmobile,
-			'billing_email' => $odemail,
-			'delivery_name' => $odname,
-			'delivery_address' => $odaddress,
-			'delivery_city' => $odcity,
-			'delivery_state' => $odstate,
-			'delivery_zip' => $odpin,
-			'delivery_country' => $odcountry,
-			'delivery_tel' => $odmobile,
-			'merchant_param1' => '',
-			'merchant_param2' => '',
-			'merchant_param3' => '',
-			'merchant_param4' => '',
-			'merchant_param5' => '',
-			'promo_code' => '',
-			'customer_identifier' => '',
-        );
-        // Redirect to CCAvenue payment page
-        wp_redirect('https://secure.ccavenue.com/transaction/initTrans');
-        exit;
-    }
+add_action('wp_footer', 'forminator_custom_submit_script');
+function forminator_custom_submit_script() {
+    ?>
+	<script type="text/javascript">
+        jQuery(document).ready(function($) {
+            
+            $('#forminator-module-2270').on('submit', function(event) {
+				event.preventDefault();
+				
+                var form = event.target;
+                var formId = $(form).data('form-id'); // Get form ID
+                
+                if (formId == 2270) {
+                    
+                    var amount = $(form).find('input[name="number-1"]').val();
+                    var name = $(form).find('input[name="name-1"]').val();
+                    var email = $(form).find('input[name="email-1"]').val();
+					console.log('amount ',amount);
+					console.log('name ',name);
+					console.log('email ',email);
+
+					if(amount != '' && name != '' && email != '') {
+						
+						var formData = new FormData();
+						formData.append('amount', amount);
+						formData.append('name', name);
+						formData.append('email', email);
+
+						$.ajax({
+							url: '<?php echo get_stylesheet_directory_uri()."/ccavenue/ccavRequestHandler.php"; ?>',
+							type: 'POST',
+							data: formData,
+							processData: false,
+							contentType: false,
+							success: function(response) {
+								
+								$('body').append(response);
+							}
+						});
+					}else{
+						
+						return false;
+					}
+                }
+            });
+        });
+    </script>
+    <?php
 }
-
-/* add_action('template_redirect', 'handle_ccavenue_response');
-
-function handle_ccavenue_response() {
-    if (is_page('your-success-url')) {
-        global $wpdb;
-
-        // Get the response data from CCAvenue
-        $merchant_id = $_POST['merchant_id'];
-        $order_id = $_POST['order_id'];
-        $tracking_id = $_POST['tracking_id'];
-        $status = $_POST['status'];
-        $payment_status = $_POST['payment_status'];
-
-        // Store the payment status in the custom table
-        $table_name = $wpdb->prefix . 'payment_status';
-        $wpdb->insert($table_name, [
-            'form_id' => YOUR_FORM_ID,
-            'payment_status' => $payment_status,
-            'transaction_id' => $tracking_id,
-        ]);
-
-        // Add additional processing or redirects as necessary
-        wp_redirect(site_url('/thank-you/')); // Redirect to thank you page
-        exit;
-    }
-} */
 
 //contact form submission store to db
 add_action('wpcf7_before_send_mail', 'save_contact_form_data_to_custom_table');
@@ -1329,4 +1204,37 @@ function save_contact_form_data_to_custom_table($contact_form) {
             ));
         }
     }
+
 }
+
+function save_data_in_db($formData) {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'online_donation_master';
+// 	$od_insert = $wpdb->insert($od_table,
+// 	array(
+// 		'odname' => $data['name-1'],
+// 		'odaddress' => $data['address-1-street_address'],
+// 		'odcity' => $data['address-1-city'],
+// 		'odstate' => $data['address-1-state'],
+// 		'odpin' => $data['address-1-zip'],
+// 		'odcountry' => $data['address-1-country'],
+// 		'odmobile' => $data['phone-1'],
+// 		'odemail' => $data['email-1'],
+// 		'oddetails' => $data['text-1'],
+// 		'odamount' => $data['number-1'],
+// 		'odstatus' => 'pending',
+// 		'is_trash' => 0,
+// 	)
+// );
+    $wpdb->insert(
+        $table_name,
+        array(
+            'odname' => sanitize_text_field($formData['name']),
+            'odemail' => sanitize_email($formData['email']),
+            'odamount' => sanitize_text_field($formData['amount']),
+            'odstatus' => 'Success',
+			'is_trash' => 0,
+        )
+    );
+}
+

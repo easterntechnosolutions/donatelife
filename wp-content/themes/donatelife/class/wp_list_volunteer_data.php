@@ -13,7 +13,7 @@ class Volunteer_List extends WP_List_Table {
         $columns = [
             'cb'       => '<input type="checkbox" />', // For bulk actions
             'id'       => __('ID', 'donatelife'),
-            'vdate'       => __('Date', 'donatelife'),
+            'vdate'       => __('Birth Date', 'donatelife'),
             'vfullname'     => __('Name', 'donatelife'),
             'vgender'    => __('Gender', 'donatelife'),
             'vcity'     => __('City', 'donatelife'),

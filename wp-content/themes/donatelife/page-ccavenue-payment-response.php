@@ -1,28 +1,37 @@
 <?php
 /* Template Name: CCAvenue Payment Response Page */
 
+require_once get_stylesheet_directory_uri().'/ccavenue/Crypto.php';
+
 global $wpdb;
-// This page will be your callback URL for successful payments
-if (isset($_POST['encResp'])) {
-    $working_key = '9E52BA0317EB2B12ADF4FE9A504897A0'; // Provided by CCAvenue
-    $encrypted_response = $_POST['encResp'];
-
-    // Decrypt the response
-    $decrypted_response = decrypt($encrypted_response, $working_key);
-    parse_str($decrypted_response, $response_data);
-
-    if ($response_data['order_status'] == "Success") {
-        $od_table = $wpdb->prefix.'online_donation_master';
+if (isset($_POST["encResp"])) {
+    $working_key = '9E52BA0317EB2B12ADF4FE9A504897A0'; // CCAvenue working key
+    $encResponse = $_POST["encResp"]; // The encrypted response from CCAvenue
+    $decryptedResponse = decryptResponse($encResponse, $working_key); // Decrypt response
+    parse_str($decryptedResponse, $responseArray);
+    
+    // Check the payment status
+    if ($responseArray['order_status'] == 'Success') {
+        // Payment was successful
         
-        // Payment successful, do something (e.g., update the database, send an email, etc.)
-        echo "Payment Successful!";
-    } else {
-        // Payment failed or canceled
-        echo "Payment Failed!";
-    }
-}
+        // Prepare form data for email
+        $formData = array(
+            'name' => $responseArray['billing_name'],
+            'email' => $responseArray['billing_email'],
+            'amount' => $responseArray['amount']
+        );
 
-function decrypt($encrypted_data, $working_key) {
-    // Implement decryption logic as per CCAvenue requirements
+        // Save the form data in the database
+        save_data_in_db($formData);
+
+        // Trigger the CF7 mail using the 'wpcf7_submit' action
+        do_action('wpcf7_mail_sent', $formData);
+        
+        // Display success message or redirect user
+        echo "Payment successful! An email has been sent.";
+    } else {
+        // Payment failed or was canceled
+        echo "Payment failed or canceled.";
+    }
 }
 ?>
