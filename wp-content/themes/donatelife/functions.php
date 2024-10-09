@@ -832,6 +832,197 @@ function generate_pdf($form_data,$submitid) {
     return array('html' => $html, 'filepath' => $pdf_file_path, 'filename'=> $filename);
 }
 
+/** generate pdf function */
+function generate_pdf_cf7($form_data,$submitid) {
+	$registration_no = $submitid;
+	$year = date("y");
+	$mandal = $form_data['ref_mandal'];
+	$dfirstname = $form_data['dfirstname']; //donor's full name
+	$dmiddlename = $form_data['dmiddlename'];
+	$dlastname = $form_data['dlastname'];
+	$dwcontact = $form_data['dwcontact']; //relative telephone number
+	$final_dOrgan_arr = $form_data['dOrgan']; //organs checkbox
+	$final_dTissues_arr = $form_data['dTissues']; //tissues checkbox
+	$ganesha_mandal = $form_data['ganesha_mandal']; //reference textbox value
+	
+	if($mandal == ''){
+		$html = '<!DOCUMENT html>
+					<html lang="en">
+					<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+					<title>Donatelife Donor Card</title>
+					</head>
+					<body>
+					
+						<div style=" border:1px solid #ccc; width:100%;border-bottom:none;">
+					
+							<div style="background:#008275; -webkit-print-color-adjust: exact;">
+								<h2 style="text-align:center; margin:0px; padding:5px 0; color:#fff; font-size:40px;">ORGAN DONOR CARD</h2>
+							</div>
+					
+							<div style="width:100%">
+								<img src="'.get_stylesheet_directory_uri().'/images/pdfimages/card2.jpg" alt="donate" width="99.94%">
+							</div>
+						
+							<div style="width:100%; background-color:#cde1d6; margin-top:0;color: #fff;">
+								<div style="width:100%; float:left; background-color:#02786a; padding:10px 0;">
+									<p style="margin-top:0; text-align:center; margin-bottom:0; color:#fff; font-size:32px; text-transform: uppercase">'.$dfirstname.' '.$dmiddlename.' '.$dlastname.'</p>
+								</div>
+								
+							</div>
+							
+					
+							<div style="padding: 10px;">
+							
+							<img src="'.get_stylesheet_directory_uri().'/images/pdfimages/footerfront.jpeg">
+							
+							
+							</div>
+							<div style="clear:both;"></div>
+						</div>
+						<div style=" border:1px solid #ccc; width:100%;border-top:3px dotted #ccc;">
+					
+						<div>
+							<p style="text-align:center; font-size:20px;"><strong>Registration No.DL'.$year.' '.$registration_no.'</strong></p>
+							<p style="text-align:center; color: #484747; font-size:18px;">I have pledged to donate the organs & Tissues from<br> my body for therapeutic purpose after my death(Brain stem/Cardiac)</p>
+						</div>
+					
+						<div style="border-top:2px solid #5cbb79; border-bottom:2px solid #5cbb79; margin:3px; ">
+							<p style="text-align:center; font-size:17px; margin:5px;"><strong>Emergency Contact No: '.$dwcontact.'</strong></p>
+						</div>
+						
+						<div>
+							<p style="font-size: 14px; padding:0 40px;">
+							<strong>
+							Organs : <span style="font-size:14px; color: red;">
+							Heart :<input type="radio" name="Heart" value="heart" '.(in_array("Heart",$final_dOrgan_arr) ? ' checked="checked" ' : '') .'> 
+							Lungs :<input type="radio" name="Lungs" value="lungs" '.(in_array("Lungs",$final_dOrgan_arr) ? ' checked="checked" ' : '') .'> 
+							Liver :<input type="radio" name="liver" value="liver" '.(in_array("Liver",$final_dOrgan_arr) ? ' checked="checked" ' : '') .'> 
+							Kidneys :<input type="radio" name="kidneys" value="kidneys" '.(in_array("Kidneys",$final_dOrgan_arr) ? ' checked="checked" ' : '') .'>
+							Pancreas :<input type="radio" name="pancreas" value="pancreas" '.(in_array("Pancrease",$final_dOrgan_arr) ? ' checked="checked" ' : '') .'> 
+							Intestine :<input type="radio" name="intestine" value="intestine" '.(in_array("Intestine",$final_dOrgan_arr) ? ' checked="checked" ' : '') .'>
+							All :<input type="radio" name="all" value="all" '.(in_array("All",$final_dOrgan_arr) ? ' checked="checked" ' : '') .'></span>
+							</strong></p>
+					
+							<p style="font-size: 14px; padding:0 40px;"><strong>
+							Tissues : <span style="font-size:14px; color: red;">
+							Corneas :<input type="radio" name="corneas" value="corneas"  '.(in_array("Corneas-Eye-Balls",$final_dTissues_arr) ? ' checked="checked" ' : '') .'> 
+							Skin :<input type="radio" name="skin" value="skin"  '.(in_array("Skin",$final_dTissues_arr) ? ' checked="checked" ' : '') .'> 
+							Bones :<input type="radio" name="bones" value="bones" '.(in_array("Bones",$final_dTissues_arr) ? ' checked="checked" ' : '') .'> 
+							Heart Valves :<input type="radio" name="heart_valves" value="heart_valves" '.(in_array("Heart Valves",$final_dTissues_arr) ? ' checked="checked" ' : '') .'> 
+							Blood Vessels :<input type="radio" name="blood_vessels" value="blood_vessels" '.(in_array("Blood vessels",$final_dTissues_arr) ? ' checked="checked" ' : '') .'> 
+							All :<input type="radio" name="all" value="all" '.(in_array("All",$final_dTissues_arr) ? ' checked="checked" ' : '') .'></span></strong></p> 
+						</div>
+						
+					
+						<div style="margin:10px 1px;">
+							<img src="'.get_stylesheet_directory_uri().'/images/pdfimages/footer_slogan.jpg" alt="footer" style="width:100%;">
+						</div>
+						<div style="margin:10px 1px;">
+							<img src="'.get_stylesheet_directory_uri().'/images/pdfimages/footer2.jpg" alt="footer" style="width:100%;">
+						</div>
+					
+						</div>
+						
+					</body>
+					</html>';
+	} else  {
+		$html = '<!DOCUMENT html>
+					<html lang="en">
+						<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+							<title>Donatelife Donor Card</title>
+						</head>
+						<body>
+						
+							<div style=" border:1px solid #ccc; width:100%;border-bottom:none;">
+						
+								<div style="background:#008275; -webkit-print-color-adjust: exact;">
+									<h2 style="text-align:center; margin:0px; padding:5px 0; color:#fff; font-size:40px;">ORGAN DONOR CARD</h2>
+								</div>
+						
+								<div style="width:100%">
+									<img src="'.get_stylesheet_directory_uri().'/images/pdfimages/card2.jpg" alt="donate" width="99.94%">
+								</div>
+							
+								<div style="width:100%; background-color:#cde1d6; margin-top:0;color: #fff;">
+									<div style="width:100%; float:left; background-color:#02786a; padding:10px 0;">
+										<p style="margin-top:0; text-align:center; margin-bottom:0; color:#fff; font-size:32px; text-transform: uppercase">'.$dfirstname.' '.$dmiddlename.' '.$dlastname.'</p>
+									</div>
+									
+								</div>
+								
+						
+								<div style="padding: 10px;">
+								
+								<img src="'.get_stylesheet_directory_uri().'/images/pdfimages/footerfront.jpeg">
+								
+								
+								</div>
+								<div style="clear:both;"></div>
+							</div>
+							<div style=" border:1px solid #ccc; width:100%;border-top:3px dotted #ccc;">
+						
+							<div>
+								<p style="text-align:center; font-size:20px;"><strong>Registration No.DL'.$year.' '.$registration_no.'</strong></p>
+								<p style="text-align:center; color: #484747; font-size:18px;">I have pledged to donate the organs & Tissues from<br> my body for therapeutic purpose after my death(Brain stem/Cardiac)</p>
+							</div>
+						
+							<div style="border-top:2px solid #5cbb79; border-bottom:2px solid #5cbb79; margin:3px; ">
+								<p style="text-align:center; font-size:17px; margin:5px;"><strong>Emergency Contact No: '.$dwcontact.'</strong></p>
+							</div>
+							
+							<div>
+								<p style="font-size: 14px; padding:0 40px;">
+								<strong>
+								Organs : <span style="font-size:14px; color: red;">
+								Heart :<input type="radio" name="Heart" value="heart" '.(in_array("Heart",$final_dOrgan_arr) ? ' checked="checked" ' : '') .'> 
+								Lungs :<input type="radio" name="Lungs" value="lungs" '.(in_array("Lungs",$final_dOrgan_arr) ? ' checked="checked" ' : '') .'> 
+								Liver :<input type="radio" name="liver" value="liver" '.(in_array("Liver",$final_dOrgan_arr) ? ' checked="checked" ' : '') .'> 
+								Kidneys :<input type="radio" name="kidneys" value="kidneys" '.(in_array("Kidneys",$final_dOrgan_arr) ? ' checked="checked" ' : '') .'>
+								Pancreas :<input type="radio" name="pancreas" value="pancreas" '.(in_array("Pancrease",$final_dOrgan_arr) ? ' checked="checked" ' : '') .'> 
+								Intestine :<input type="radio" name="intestine" value="intestine" '.(in_array("Intestine",$final_dOrgan_arr) ? ' checked="checked" ' : '') .'>
+								All :<input type="radio" name="all" value="all" '.(in_array("All",$final_dOrgan_arr) ? ' checked="checked" ' : '') .'></span>
+								</strong></p>
+						
+								<p style="font-size: 14px; padding:0 40px;"><strong>
+								Tissues : <span style="font-size:14px; color: red;">
+								Corneas :<input type="radio" name="corneas" value="corneas"  '.(in_array("Corneas-Eye-Balls",$final_dTissues_arr) ? ' checked="checked" ' : '') .'> 
+								Skin :<input type="radio" name="skin" value="skin"  '.(in_array("Skin",$final_dTissues_arr) ? ' checked="checked" ' : '') .'> 
+								Bones :<input type="radio" name="bones" value="bones" '.(in_array("Bones",$final_dTissues_arr) ? ' checked="checked" ' : '') .'> 
+								Heart Valves :<input type="radio" name="heart_valves" value="heart_valves" '.(in_array("Heart Valves",$final_dTissues_arr) ? ' checked="checked" ' : '') .'> 
+								Blood Vessels :<input type="radio" name="blood_vessels" value="blood_vessels" '.(in_array("Blood vessels",$final_dTissues_arr) ? ' checked="checked" ' : '') .'> 
+								All :<input type="radio" name="all" value="all" '.(in_array("All",$final_dTissues_arr) ? ' checked="checked" ' : '') .'></span></strong></p> 
+							</div>
+							
+						
+							<div style="margin:10px 1px;">
+								<img src="'.get_stylesheet_directory_uri().'/images/pdfimages/footer_slogan.jpg" alt="footer" style="width:100%;">
+							</div>
+						<div style="margin:10px 1px; position: relative;;">
+								<img src="'.get_stylesheet_directory_uri().'/images/pdfimages/angdan_img-1.jpg" alt="footer" style="width:100%;position: relative;z-index:8;">
+								<div style="color: red;
+										font-weight: bold;
+										font-size: 16px;
+										margin-top: -50px;
+										padding-bottom:20px;
+										margin-left: 25%;
+										z-index:10;
+										postion:relative;
+										display: block;">'. $ganesha_mandal .'</div>
+								
+							</div>
+							</div>
+							
+						</body>
+					</html>';
+	}
+	
+	$filename = $dfirstname.'_'.time().'.pdf';
+	$upload_dir = wp_upload_dir();
+    $pdf_file_path = $upload_dir['basedir'] . '/donor_card/'. $filename;
+   
+    return array('html' => $html, 'filepath' => $pdf_file_path, 'filename'=> $filename);
+}
+
 /**Generate pdf for become a donor form before sending an email */
 add_action('forminator_custom_form_mail_before_send_mail', 'generate_pdf_and_attach_to_email', 20, 4);
 function generate_pdf_and_attach_to_email($mail_object, $custom_form, $data, $entry) {
@@ -1204,6 +1395,98 @@ function save_contact_form_data_to_custom_table($contact_form) {
             ));
         }
     }
+	
+	if ($contact_form->name() == 'become-a-donor') { //become a donor form
+        global $wpdb;
+        $submission = WPCF7_Submission::get_instance();
+        
+        if ($submission) {
+            $data = $submission->get_posted_data();
+			
+			$dOrgan = $data['dOrgan'];
+			$dTissues = $data['dTissues'];
+			
+			$final_dOrgan =implode(',', $dOrgan);
+			$final_dTissues =implode(',', $dTissues);
+
+			$donor_table = $wpdb->prefix.'donor_master';
+			$insert_donor = $wpdb->insert($donor_table, 
+				array(
+					'dfirstname' => $data['dfirstname'],
+					'dmiddlename' => $data['dmiddlename'],
+					'dlastname' => $data['dlastname'],
+					'daged' => $data['daged'],
+					'ddate' => date('Y-m-d',strtotime($data['ddob'])),
+					'dwhatsapp' => $data['dwhatsapp'],
+					'dgender' => $data['dgender'],
+					'dOrgan' => $final_dOrgan,
+					'dTissues' => $final_dTissues,
+					'dbloodgroup' => $data['dbloodgroup'],
+					'dcontact' => $data['dcontact'],
+					'demail' => $data['demail'],
+					'daddress' => $data['daddress'],
+					'dtaluka' => $data['dtaluka'],
+					'ddist' => $data['ddist'],
+					'dstate' => $data['dstate'],
+					'dfirstNameOfWitness' => $data['dfirstNameOfWitness'],
+					'dmiddleNameOfWitness' => $data['dmiddleNameOfWitness'],
+					'dlastNameOfWitness' => $data['dlastNameOfWitness'],
+					'dwaged' => $data['dwaged'],
+					'dwcontact' => $data['dwcontact'],
+					'dwemail' => $data['dwemail'],
+					'dwgender' => $data['dwgender'],
+					'dwaddress' => $data['dwaddress'],
+					'dwtaluka' => $data['dwtaluka'],
+					'dwdist' => $data['dwdist'],
+					'dwstate' => $data['dwstate'],
+					'todaydate' => date('Y-m-d'),
+					'ganesha_mandal' => $data['ganesha_mandal'],
+					'dwNearRelative'	=> $data['dwNearRelative'],
+					'createdate' => date('Y-m-d'),
+					'is_trash' => 0,
+				)
+			);
+			
+			if($insert_donor) {
+
+				$entryid = $wpdb->insert_id;
+				$pdf_data = generate_pdf_cf7($data, $entryid);
+				$pdf_file_path = $pdf_data['filepath'];
+
+				require_once get_stylesheet_directory() . '/vendor/autoload.php';
+
+				$mpdf = new \Mpdf\Mpdf();
+				$mpdf->WriteHTML($pdf_data['html']);
+				$mpdf->Output($pdf_file_path,'F');
+				
+				$year = date("y");
+				$register_number = 'DL'.$year.' '.$entryid;
+				
+				$update_data = $wpdb->update($donor_table,
+					array(
+						'donor_card' => $pdf_data['filename'],
+						'registration_no' => $register_number,
+					),
+					array('id' => $entryid)
+				);
+
+				add_filter( 'wpcf7_mail_components', function( $components ) use ($pdf_file_path) {
+					// Ensure the attachments array exists and is an array
+					if (!isset($components['attachments']) || !is_array($components['attachments'])) {
+						$components['attachments'] = array();
+					}
+		
+					// Attach the generated PDF file
+					$components['attachments'][] = $pdf_file_path;
+		
+					return $components;
+				});
+
+			}else{
+				echo $wpdb->last_error;
+			}
+		}
+	}
 
 }
 

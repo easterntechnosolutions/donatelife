@@ -4394,15 +4394,21 @@ p {
     margin-top: 20px
 }
 
-.donor-block input[type=checkbox] + label, .donor-block input[type=radio] + label, .volunteer-block input[type=checkbox] + label, .volunteer-block input[type=radio] + label {
+.donor-block input[type=checkbox] + span, .donor-block input[type=radio] + span, .volunteer-block input[type=checkbox] + label, .volunteer-block input[type=radio] + label {
     margin-top: 0
 }
 
 .donor-block ul.form-group, .volunteer-block ul.form-group {
     margin-bottom: 0
 }
-
-.donor-block input[type=text], .donor-block input[type=date],  .donor-block select, .volunteer-block input[type=text], .volunteer-block input[type=number], .volunteer-block input[type=date], .volunteer-block select, .donor-block input[type=month] {
+.donor-block .wpcf7-checkbox span {
+    width: 50%;
+    margin: 0;
+}
+.donor-block .wpcf7-checkbox span label {
+    margin: 0;
+}
+.donor-block input[type=text], .donor-block input[type=email], .donor-block input[type=date],  .donor-block select, .volunteer-block input[type=text], .volunteer-block input[type=number], .volunteer-block input[type=date], .volunteer-block select, .donor-block input[type=month] {
     background: #fff;
     border: 1px solid #e3e3e3;
     border-radius: 0;
