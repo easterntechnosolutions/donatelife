@@ -1170,7 +1170,7 @@ function generate_pdf_and_attach_to_email($mail_object, $custom_form, $data, $en
 			
 		}
 	}
-	else if($custom_form->name == 'online-donation-form') {
+/*	else if($custom_form->name == 'online-donation-form') {
 		
 		$od_table = $wpdb->prefix.'online_donation_master';
 		$od_insert = $wpdb->insert($od_table,
@@ -1190,7 +1190,7 @@ function generate_pdf_and_attach_to_email($mail_object, $custom_form, $data, $en
 			)
 		);
 		
-	}
+	}*/
 }
 
 // add_filter('forminator_custom_upload_subfolder',function($subfolder, $form_id, $dir) {
@@ -1308,22 +1308,32 @@ function forminator_custom_submit_script() {
 				
                 var form = event.target;
                 var formId = $(form).data('form-id'); // Get form ID
-                
+				var isValid = true;
+
                 if (formId == 2270) {
                     
-                    var amount = $(form).find('input[name="number-1"]').val();
-                    var name = $(form).find('input[name="name-1"]').val();
-                    var email = $(form).find('input[name="email-1"]').val();
-					console.log('amount ',amount);
-					console.log('name ',name);
-					console.log('email ',email);
-
-					if(amount != '' && name != '' && email != '') {
+                    // Loop through all required fields
+					$('#forminator-module-2270 .forminator-field input[data-required="1"], #forminator-module-2270 .forminator-field textarea[data-required="1"], #forminator-module-2270 .forminator-field select[data-required="1"]').each(function() {
+					   
+						if ($(this).val() === '') {
+							isValid = false;
+							
+						} else {
+                            //isValid = true;
+                            
+						}
+					});
+					
+					if (isValid) {
+						var amount = $(form).find('input[name="number-1"]').val();
+						var name = $(form).find('input[name="name-1"]').val();
+						var email = $(form).find('input[name="email-1"]').val();
 						
-						var formData = new FormData();
-						formData.append('amount', amount);
-						formData.append('name', name);
-						formData.append('email', email);
+						var formData = new FormData(this);
+						
+				// 		formData.append('amount', amount);
+				// 		formData.append('name', name);
+				// 		formData.append('email', email);
 
 						$.ajax({
 							url: '<?php echo get_stylesheet_directory_uri()."/ccavenue/ccavRequestHandler.php"; ?>',
@@ -1346,7 +1356,6 @@ function forminator_custom_submit_script() {
     </script>
     <?php
 }
-
 //contact form submission store to db
 add_action('wpcf7_before_send_mail', 'save_contact_form_data_to_custom_table');
 

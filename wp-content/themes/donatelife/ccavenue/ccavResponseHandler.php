@@ -13,13 +13,22 @@ $decrypted_response = decrypt($enc_response, $working_key);
 
 // Parse the response
 parse_str($decrypted_response, $response);
-
 $od_table = $wpdb->prefix.'online_donation_master';
-$od_insert = $wpdb->update($od_table,
+$od_insert = $wpdb->insert($od_table,
 	array(
+		'odname' => $response['billing_name'],
+		'odaddress' => $response['billing_address'],
+		'odcity' => $response['billing_city'],
+		'odstate' => $response['billing_state'],
+		'odpin' => $response['billing_zip'],
+		'odcountry' => $response['billing_country'],
+		'odmobile' => $response['billing_tel'],
+		'odemail' => $response['billing_email'],
+		'oddetails' => $response['merchant_param1'],
+		'odamount' => $response['amount'],
 		'odstatus' => $response['order_status'],
-	), 
-	array('id' => $wpdb->insert_id)
+		'is_trash' => 0,
+	)
 );
 // Check the payment status
 if ($response['order_status'] === "Success") {
@@ -27,7 +36,7 @@ if ($response['order_status'] === "Success") {
 	echo "Donation successful! Thank you for your payment.";
     // Handle success, store transaction data, send email, etc.
 } else {
-    echo "Payment failed. Please try again. <a href='".site_url()."'>Go back to Home</a>";
+    echo "Payment failed. Please try again. <a href='".site_url()."/online-donation/'>Go back</a>";
     // Handle failure, log errors, etc.
 }
 ?>
