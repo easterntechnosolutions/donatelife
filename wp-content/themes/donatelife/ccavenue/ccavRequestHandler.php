@@ -18,6 +18,7 @@ $merchant_data .= 'merchant_id=' . $merchant_id . '&order_id=' . uniqid() . '&cu
 $merchant_data .= '&amount=' . $amount;
 $merchant_data .= '&billing_name=' . $name . '&billing_email=' . $email;
 $merchant_data .= '&redirect_url=' . get_stylesheet_directory_uri().'/ccavenue/ccavResponseHandler.php';
+$merchant_data .= '&cancel_url=' . get_stylesheet_directory_uri().'/ccavenue/ccavResponseHandler.php';
 
 $encrypted_data = encrypt($merchant_data, $working_key);
 

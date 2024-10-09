@@ -27,7 +27,7 @@ if ($response['order_status'] === "Success") {
 	echo "Donation successful! Thank you for your payment.";
     // Handle success, store transaction data, send email, etc.
 } else {
-    echo "Payment failed. Please try again.";
+    echo "Payment failed. Please try again. <a href='".site_url()."'>Go back to Home</a>";
     // Handle failure, log errors, etc.
 }
 ?>
