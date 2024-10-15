@@ -1481,3 +1481,12 @@ function load_online_donation_content_callback() {
 	echo $html;
 	wp_die();
 }
+
+function dl_redirect_404() {
+    global $wp_query;
+    if ( $wp_query->is_404 ) {
+      wp_redirect( home_url(), 301 );
+      exit;
+    }
+}
+add_action('template_redirect', 'dl_redirect_404', 1);

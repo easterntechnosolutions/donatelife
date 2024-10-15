@@ -1173,12 +1173,12 @@ function generate_pdf_and_attach_to_email($mail_object, $custom_form, $data, $en
 
 }
 
-// add_filter('forminator_custom_upload_subfolder',function($subfolder, $form_id, $dir) {
-// 	if($form_id == '2257') { //volunteer form id
-// 		$subfolder = 'volunteer';
-// 	} 
-// 	return $subfolder;
-// },20,3);
+add_filter('forminator_custom_upload_subfolder',function($subfolder, $form_id, $dir) {
+	if($form_id == '2257') { //volunteer form id
+		$subfolder = '';
+	} 
+	return $subfolder;
+},20,3);
 
 
 /**Send SMS after user submits the form - right now API is not working. */
