@@ -9,7 +9,7 @@ function display_donated_number_callback(){
 			<!-- Start single-item -->
 			<div class="welcome-item">
 				<div class="img-holder">
-					<figure><a href="#"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-1.jpg" alt="Images" loading="lazy"></a></figure>
+					<figure><a href="#"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-1.jpg" alt="Images" class="img-responsive" loading="lazy"></a></figure>
 				</div>
 				<div class="text">
 					<div class="pro-text text-center">
@@ -26,7 +26,7 @@ function display_donated_number_callback(){
 			<!-- Start single-item -->
 			<div class="welcome-item">
 				<div class="img-holder">
-					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-2.jpg" alt="Images" loading="lazy"></a></figure>
+					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-2.jpg" alt="Images" class="img-responsive" loading="lazy"></a></figure>
 				</div>
 				<div class="text">
 					<div class="pro-text text-center">
@@ -42,7 +42,7 @@ function display_donated_number_callback(){
 			<!-- Start single-item -->
 			<div class="welcome-item">
 				<div class="img-holder">
-					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-3.jpg" alt="Images" loading="lazy"></a></figure>
+					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-3.jpg" alt="Images" class="img-responsive" loading="lazy"></a></figure>
 				</div>
 				<div class="text">
 					<div class="pro-text text-center">
@@ -58,7 +58,7 @@ function display_donated_number_callback(){
 			<!-- Start single-item -->
 			<div class="welcome-item">
 				<div class="img-holder">
-					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/lungs.jpg" alt="Images" loading="lazy"></a></figure>
+					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/lungs.jpg" alt="Images" class="img-responsive" loading="lazy"></a></figure>
 				</div>
 				<div class="text">
 					<div class="pro-text text-center">
@@ -74,7 +74,7 @@ function display_donated_number_callback(){
 			<!-- Start single-item -->
 			<div class="welcome-item">
 				<div class="img-holder">
-					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-4.jpg" alt="Images" loading="lazy"></a></figure>
+					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-4.jpg" alt="Images" class="img-responsive" loading="lazy"></a></figure>
 				</div>
 				<div class="text">
 					<div class="pro-text text-center">
@@ -89,7 +89,7 @@ function display_donated_number_callback(){
 		<div class="col-md-2 col-sm-6 col-xs-6 organ-div">
 			<div class="welcome-item">
 				<div class="img-holder">
-					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-9.jpg" alt="Images" loading="lazy"></a></figure>
+					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-9.jpg" alt="Images" class="img-responsive" loading="lazy"></a></figure>
 				</div>
 				<div class="text">
 					<div class="pro-text text-center">
@@ -104,7 +104,7 @@ function display_donated_number_callback(){
 			<!-- Start single-item -->
 			<div class="welcome-item">
 				<div class="img-holder">
-					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h7.png" alt="Images" loading="lazy"></a></figure>
+					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h7.png" alt="Images" class="img-responsive" loading="lazy"></a></figure>
 				</div>
 				<div class="text">
 					<div class="pro-text text-center">
@@ -120,7 +120,7 @@ function display_donated_number_callback(){
 			<!-- Start single-item -->
 			<div class="welcome-item">
 				<div class="img-holder">
-					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-5.jpg" alt="Images" loading="lazy"></a></figure>
+					<figure><a href=""><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/h-5.jpg" alt="Images" class="img-responsive" loading="lazy"></a></figure>
 				</div>
 				<div class="text">
 					<div class="pro-text text-center">
@@ -162,7 +162,7 @@ function display_awards_callback(){
 			$awid = $award->ID;
 			$pdf = get_field('award_pdf',$awid);
 			$pdflink = !empty($pdf) ? $pdf['url'] : '';
-			$featuredimg = get_the_post_thumbnail( $awid,array(370,230));
+			$featuredimg = get_the_post_thumbnail( $awid,array(370,230), array('class' => 'img-responsive'));
 			$desc = $award->post_content;
 			?>
 			<div class="col-md-6 col-sm-6 col-xs-12 event-block">
