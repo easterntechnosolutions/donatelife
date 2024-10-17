@@ -135,7 +135,7 @@ function display_donated_number_callback(){
 	</div>
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
-				<h4 class="digit-below">Total <?php echo get_field('total_donated','option'); ?> Organs & Tissues donated which has given New Life & Vision to 1147 persons across Country & Globe.</h4>
+				<h4 class="digit-below">Total <?php echo get_field('total_donated','option'); ?> Organs & Tissues donated which has given New Life & Vision to <?php echo get_field('total_person','option'); ?> persons across Country & Globe.</h4>
 			</div>
 		</div>
 		<?php //$total = $web_arr['kidneys_donated'] + $web_arr['intestine_donated'] + $web_arr['livers_donated'] + $web_arr['hearts_donated'] + $web_arr['pancreas_donated'] + $web_arr['eyes_donated'] + $web_arr['hand_donation']; ?>
