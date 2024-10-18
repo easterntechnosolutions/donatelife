@@ -571,5 +571,10 @@
                 }
             });
         });
+
+         //stop right click on the website
+         $(document).on("contextmenu", function(e) {
+            return false;
+        });
         
 })(jQuery);

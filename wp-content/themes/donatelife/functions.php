@@ -599,7 +599,7 @@ function send_smtp_email($phpmailer){
 	$phpmailer->SMTPSecure = 'tls';
 	$phpmailer->SMTPAuth = true;
 	$phpmailer->Username = 'noreplydonatelife9@gmail.com'; 
-	$phpmailer->Password = 'rlnatpsumukmopjp';
+	$phpmailer->Password = 'qyglskhwknbxkdid'; //old app password - rlnatpsumukmopjp
 	$phpmailer->From = 'noreplydonatelife9@gmail.com';
 	$phpmailer->FromName = 'Donate Life';
 }

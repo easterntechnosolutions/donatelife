@@ -1603,6 +1603,9 @@ li, ul {
     text-transform: uppercase
 }
 
+.news-seciton .wpcf7 form .wpcf7-response-output{
+    color: #fff;
+}
 .blog-seciton .blog-item {
     margin-top: 50px
 }
