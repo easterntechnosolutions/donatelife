@@ -1,4 +1,19 @@
 <?php 
+/**Add alt and title attribute in all img tags on all pages*/
+function add_alt_title_to_images($attr, $attachment, $size) {
+    $image_title = get_post_field('post_title', $attachment->ID);
+    if (empty($attr['alt'])) {
+        $attr['alt'] = $image_title;
+    }
+
+    if (empty($attr['title'])) {
+        $attr['title'] = $image_title;
+    }
+
+    return $attr;
+}
+add_filter('wp_get_attachment_image_attributes', 'add_alt_title_to_images', 10, 3);
+
 /** 1. Display custom field columns in WP table - post_type=cadaver_donor */
 add_filter( 'manage_edit-cadaver_donor_columns', 'add_acf_column_to_cpt' );
 function add_acf_column_to_cpt( $columns ) {
@@ -1485,7 +1500,7 @@ function load_online_donation_content_callback() {
 function dl_redirect_404() {
     global $wp_query;
     if ( $wp_query->is_404 ) {
-      wp_redirect( home_url(), 301 );
+      wp_redirect( site_url(), 301 );
       exit;
     }
 }

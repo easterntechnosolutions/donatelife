@@ -150,7 +150,7 @@ class Volunteer_List extends WP_List_Table {
         $where = '';
         if (!empty($_REQUEST['s'])) {
             $search = esc_sql($_REQUEST['s']);
-            $where = " vfullname LIKE '%$search%' OR vemail LIKE '%$search%' OR vcity LIKE '%$search%' OR vmobile LIKE '%$search%'";
+            $where = " and (vfullname LIKE '%$search%' OR vemail LIKE '%$search%' OR vcity LIKE '%$search%' OR vmobile LIKE '%$search%')";
         }
         $table_name = $wpdb->prefix . 'volunteer_master'; // Replace with your custom table name
         $results = $wpdb->get_results("SELECT * FROM $table_name WHERE is_trash = 0 $where ORDER BY id DESC", ARRAY_A);

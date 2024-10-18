@@ -152,7 +152,7 @@ class Donor_List extends WP_List_Table {
         $where = '';
         if (!empty($_REQUEST['s'])) {
             $search = esc_sql($_REQUEST['s']);
-            $where = " dfirstname LIKE '%$search%' OR dlastname LIKE '%$search%' OR dmiddlename LIKE '%$search%' OR dfirstNameOfWitness LIKE '%$search%'";
+            $where = " and (dfirstname LIKE '%$search%' OR dlastname LIKE '%$search%' OR dmiddlename LIKE '%$search%' OR dfirstNameOfWitness LIKE '%$search%')";
         }
         $table_name = $wpdb->prefix . 'donor_master'; // Replace with your custom table name
         $results = $wpdb->get_results("SELECT * FROM $table_name WHERE is_trash = 0 $where ORDER BY id DESC", ARRAY_A);

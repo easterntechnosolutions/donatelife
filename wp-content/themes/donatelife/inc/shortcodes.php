@@ -162,7 +162,7 @@ function display_awards_callback(){
 			$awid = $award->ID;
 			$pdf = get_field('award_pdf',$awid);
 			$pdflink = !empty($pdf) ? $pdf['url'] : '';
-			$featuredimg = get_the_post_thumbnail( $awid,array(370,230), array('class' => 'img-responsive'));
+			$featuredimg = get_the_post_thumbnail( $awid,array(370,230), array('class' => 'img-responsive', 'alt' => get_the_title( $awid ), 'title' => get_the_title( $awid ) ));
 			$desc = $award->post_content;
 			?>
 			<div class="col-md-6 col-sm-6 col-xs-12 event-block">
@@ -228,7 +228,7 @@ function get_team_member_data($atts) {
 	if(!empty($teamlist)) {
 		foreach($teamlist as $tl) {
 			$tid = $tl->ID;
-			$imgurl = has_post_thumbnail($tid) ? get_the_post_thumbnail( $tid, 'medium') : '';
+			$imgurl = has_post_thumbnail($tid) ? get_the_post_thumbnail( $tid, 'medium', array('alt' => get_the_title( $tid ), 'title' => get_the_title( $tid ) ) ) : '';
 			$description = $tl->post_content;
 	?>
 		<div class="col-md-3 col-sm-6 col-xs-12 team-single-item">
@@ -308,7 +308,7 @@ function get_testimonial_list($atts){
 			$designation = get_field('tt_designation',$ttid);
 			$ytlink = get_field('tt_youtube_link',$ttid);
 			
-			$image = (has_post_thumbnail( $ttid )) ? get_the_post_thumbnail( $ttid, $size, array('class' => 'img-responsive') ) : '';
+			$image = (has_post_thumbnail( $ttid )) ? get_the_post_thumbnail( $ttid, $size, array('class' => 'img-responsive', 'alt' => $title, 'title' => $title) ) : '';
  			if(wp_is_mobile()) { ?>
 				<div class="news-well wow fadeInUp news-line animated testimonial-block visible-xs" style="visibility: visible; animation-name: fadeInUp;">
 					<div class="row">

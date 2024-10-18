@@ -168,7 +168,7 @@ class Latest_Figure_List extends WP_List_Table {
         $where = '';
         if (!empty($_REQUEST['s'])) {
             $search = esc_sql($_REQUEST['s']);
-            $where = " latestFigureYear LIKE '%$search%' OR noofCadaver LIKE '%$search%' OR kidneyDonation LIKE '%$search%' OR kidneyTransplanted LIKE '%$search%' OR liverDonation LIKE '%$search%' OR liverTransplanted LIKE '%$search%' OR pancreasesTransplant LIKE '%$search%' OR heartTransplant LIKE '%$search%' OR cornea LIKE '%$search%' OR bones LIKE '%$search%'";
+            $where = " and (latestFigureYear LIKE '%$search%' OR noofCadaver LIKE '%$search%' OR kidneyDonation LIKE '%$search%' OR kidneyTransplanted LIKE '%$search%' OR liverDonation LIKE '%$search%' OR liverTransplanted LIKE '%$search%' OR pancreasesTransplant LIKE '%$search%' OR heartTransplant LIKE '%$search%' OR cornea LIKE '%$search%' OR bones LIKE '%$search%')";
         }
         $table_name = $wpdb->prefix . 'latestfigure'; // Replace with your custom table name
         $results = $wpdb->get_results("SELECT * FROM $table_name WHERE is_trash = 0 $where ORDER BY id ASC", ARRAY_A);

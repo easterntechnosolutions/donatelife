@@ -7,6 +7,50 @@ class Contact_Form_List extends WP_List_Table {
             'plural'   => __('Items', 'donatelife'),
             'ajax'     => false
         ]);
+
+        if (isset($_GET['action']) && $_GET['action'] == 'export_excel') {
+            $this->export_excel();
+        }
+    }
+
+    public function export_excel() {
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You do not have sufficient permissions to access this page.'));
+        }
+    
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'contact_master';
+    
+        // Fetch data from your custom table
+        $results_excel = $wpdb->get_results("SELECT * FROM $table_name WHERE is_trash = 0 ORDER BY id DESC", ARRAY_A);
+        
+        // Set headers for Excel download
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="ContactFormData.xls"');
+        header('Cache-Control: max-age=0');
+        
+        // Create a file pointer connected to the output stream
+        $output = fopen('php://output', 'w');
+        
+        // Output the Excel header row
+        fputcsv($output, array('ID', 'Date', 'Name', 'Email', 'Phone No', 'Subject', 'Message'), "\t");
+        
+        // Output data rows
+        foreach ($results_excel as $row) {
+            fputcsv($output, array(
+                $row['id'],
+                $row['cdate'],
+                $row['cname'],
+                $row['cemail'],
+                $row['ccontact'],
+                $row['csubject'],
+                $row['cmessage']
+            ), "\t");
+        }
+        
+        // Close the file pointer
+        fclose($output);
+        exit;
     }
 
     function get_columns() {
@@ -155,7 +199,7 @@ class Contact_Form_List extends WP_List_Table {
         $where = '';
         if (!empty($_REQUEST['s'])) {
             $search = esc_sql($_REQUEST['s']);
-            $where = " cname LIKE '%$search%' OR cemail LIKE '%$search%' OR ccontact LIKE '%$search%' OR cmessage LIKE '%$search%' OR csubject LIKE '%$search%'";
+            $where = " and (cname LIKE '%$search%' OR cemail LIKE '%$search%' OR ccontact LIKE '%$search%' OR cmessage LIKE '%$search%' OR csubject LIKE '%$search%')";
         }
         $table_name = $wpdb->prefix . 'contact_master'; // Replace with your custom table name
         $results = $wpdb->get_results("SELECT * FROM $table_name WHERE is_trash = 0 $where ORDER BY id DESC", ARRAY_A);
@@ -183,6 +227,7 @@ class Contact_Form_List extends WP_List_Table {
         // Output search box
         $this->search_box('Search', 'custom_search');
 
+        //echo '<a href="?page=contact-form-data&action=export_excel" class="btn btn-primary">Export to Excel</a>';
         // Output table
         parent::display();
         ?>
@@ -201,51 +246,6 @@ class Contact_Form_List extends WP_List_Table {
                 margin: -4px -6px;
             }
         </style>
-       <!--  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="myModalLabel">View Details</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        
-                        <div id="modal-content-body">Loading...</div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-        <script type="text/javascript">
-            jQuery(document).ready(function($) {
-                /* $(".view-popup").on("click", function(e) {
-                    e.preventDefault(); // Prevent the default link action
-                    
-                    var id = $(this).data("id"); // Get the ID from the data attribute
-                    $("#modal-content-body").html('Loading...');
-                    // Perform AJAX request to load the content
-                    $.ajax({
-                        url: '<?php echo admin_url( 'admin-ajax.php' ); ?>',
-                        type: "POST",
-                        data: {
-                            action: "load_online_donation_content", // Custom action hook
-                            id: id
-                        },
-                        success: function(response) {
-                            // Load the response into the modal content body
-                            $("#modal-content-body").html(response);
-                        },
-                        error: function() {
-                            $("#modal-content-body").html("Error loading data.");
-                        }
-                    });
-                }); */
-            });
-        </script>
         <?php
     }
 }
