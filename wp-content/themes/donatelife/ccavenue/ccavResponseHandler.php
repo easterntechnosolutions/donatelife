@@ -33,52 +33,53 @@ $od_insert = $wpdb->insert($od_table,
 
 $admin_email = get_option('admin_email');
 $to = $admin_email;
+$reply_to = $response['billing_email'];
 $subject = 'DonateLife - Online Donation from website';
 $body = do_shortcode('[email_header_template]');
 $body .= '<table class="tbl" width="80%" cellpadding="3" align="center">
 		<tbody>
 		<tr>
-		<td><strong> Name</strong></td>
+		<td><strong>Name</strong></td>
 		<td>:</td>
 		<td>'.$response['billing_name'].'</td>
 		</tr>
 		<tr>
-		<td><strong> Address </strong></td>
+		<td><strong>Address </strong></td>
 		<td>:</td>
 		<td>'.$response['billing_address'].'</td>
 		</tr>
 		<tr>
-		<td><strong>  City</strong></td>
+		<td><strong>City</strong></td>
 		<td>:</td>
 		<td>'.$response['billing_city'].'</td>
 		</tr>
 		<tr>
-		<td><strong>  State </strong></td>
+		<td><strong>State </strong></td>
 		<td>:</td>
 		<td>'.$response['billing_state'].'</td>
 		</tr>
 		<tr>
-		<td><strong>  Pin Code</strong></td>
+		<td><strong>Pin Code</strong></td>
 		<td>:</td>
 		<td>'.$response['billing_zip'].'</td>
 		</tr>
 		<tr>
-		<td><strong>  Country </strong></td>
+		<td><strong>Country </strong></td>
 		<td>:</td>
 		<td>'.$response['billing_country'].'</td>
 		</tr>
 		<tr>
-		<td><strong>  Mobile Number </strong></td>
+		<td><strong>Mobile Number </strong></td>
 		<td>:</td>
 		<td>'.$response['billing_tel'].'</td>
 		</tr>
 		<tr>
-		<td><strong>  Email Address </strong></td>
+		<td><strong>Email Address </strong></td>
 		<td>:</td>
 		<td>'.$response['billing_email'].'</td>
 		</tr>
 		<tr>
-		<td><strong> Donation Amount </strong></td>
+		<td><strong>Donation Amount </strong></td>
 		<td>:</td>
 		<td>'.$response['amount'].'</td>
 		</tr>
@@ -93,16 +94,19 @@ $body .= '<table class="tbl" width="80%" cellpadding="3" align="center">
 
 $headers = array('Content-Type: text/html; charset=UTF-8');
 
-wp_mail($to, $subject, $body, $headers);
+wp_mail($to, $subject, $body, $headers, $reply_to);
 
+$reply_to_admin = $admin_email;
 $user_email_subject = 'DonateLife - Thank you for your donation';
 $user_email = $response['billing_email'];
 $user_email_body = do_shortcode('[email_header_template]');
 $user_email_body .= '<br />Hi '.$response['billing_name'].' ,<br />Thank you for your Donation of '.$response['amount'].' INR to Donate Life Organization (An Initiative for Organ Donation). <br />';
+$user_email_body .= 'Your Payment Status: '.$response['order_status'];
+$user_email_body .= 'Please contact <a href="mailto:info@donatelife.org.in">info@donatelife.org.in</a> for the further details.';
 $user_email_body .= do_shortcode('[email_footer_template]');
 
 
-wp_mail($user_email, $user_email_subject, $user_email_body, $headers);
+wp_mail($user_email, $user_email_subject, $user_email_body, $headers, $reply_to_admin);
 
 // Check the payment status
 if ($response['order_status'] === "Success") {
